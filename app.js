@@ -7,6 +7,20 @@ const cors = require('cors')
 
 const { join } = require('path');
 
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+app.use(cors());
+
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('static'));
+
+app.use(bodyparser.urlencoded({ extended: true }))
+app.use(bodyparser.json())
+
+
 const logMessage = async (m,t) =>{
 
 setTimeout(()=>{
@@ -113,17 +127,7 @@ console.log('resp',JSON.stringify(response));
 
 
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-app.use(cors());
 
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('static'));
-
-app.use(bodyparser.urlencoded({ extended: true }))
-app.use(bodyparser.json())
 
 app.get('/', (req, res) => {
   res.render("index");
