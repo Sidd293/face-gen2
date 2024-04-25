@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #D3E3F8, #E0ECF8);
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #394240;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-gap: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #394240;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            color: #394240;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background: #68D391;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #4C9F68;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Generator</h1>
+    <div style="display: flex; flex-direction: column;">
+        <form method="post" action="/">
+            <!-- Existing dropdowns -->
+            <!-- Add dropdown for hair style -->
+            <label for="hairstyle">Hair Style:</label>
+            <select id="hairstyle" name="hairstyle">
+                <option value="long">Long</option>
+                <option value="short">Short</option>
+                <option value="curly">Curly</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for hair color -->
+            <label for="haircolor">Hair Color:</label>
+            <select id="haircolor" name="haircolor">
+                <option value="blonde">Blonde</option>
+                <option value="brunette">Brunette</option>
+                <option value="black">Black</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for facial hair -->
+            <label for="facialhair">Facial Hair:</label>
+            <select id="facialhair" name="facialhair">
+                <option value="none">None</option>
+                <option value="stubble">Stubble</option>
+                <option value="beard">Beard</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for glasses -->
+            <label for="glasses">Glasses:</label>
+            <select id="glasses" name="glasses">
+                <option value="none">None</option>
+                <option value="round">Round</option>
+                <option value="square">Square</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for facial expression -->
+            <label for="expression">Facial Expression:</label>
+            <select id="expression" name="expression">
+                <option value="smile">Smile</option>
+                <option value="neutral">Neutral</option>
+                <option value="frown">Frown</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for accessories -->
+            <label for="accessories">Accessories:</label>
+            <select id="accessories" name="accessories">
+                <option value="none">None</option>
+                <option value="earrings">Earrings</option>
+                <option value="necklace">Necklace</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for eye color -->
+            <label for="eyecolor">Eye Color:</label>
+            <select id="eyecolor" name="eyecolor">
+                <option value="blue">Blue</option>
+                <option value="brown">Brown</option>
+                <option value="green">Green</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for makeup -->
+            <label for="makeup">Makeup:</label>
+            <select id="makeup" name="makeup">
+                <option value="natural">Natural</option>
+                <option value="bold">Bold</option>
+                <option value="subtle">Subtle</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <!-- Add dropdown for head shape -->
+            <label for="headshape">Head Shape:</label>
+            <select id="headshape" name="headshape">
+                <option value="round">Round</option>
+                <option value="square">Square</option>
+                <option value="oval">Oval</option>
+                <!-- Add more options as needed -->
+            </select>
+            <label for="nose">Nose Size:</label>
+            <select id="nose" name="nose">
+                <option value="big">Big</option>
+                <option value="medium">Medium</option>
+                <option value="small">Small</option>
+                <option value="very-small">Very Small</option>
+                <!-- Add more options as needed -->
+            </select>
+    
+            <!-- Add dropdown for eyes -->
+            <label for="eyes">Eyes Size:</label>
+            <select id="eyes" name="eyes">
+                <option value="big">Big</option>
+                <option value="medium">Medium</option>
+                <option value="small">Small</option>
+                <option value="very-small">Very Small</option>
+                <!-- Add more options as needed -->
+            </select>
+    
+            <!-- Add dropdown for eyebrows -->
+            <label for="eyebrows">Eyebrows Size:</label>
+            <select id="eyebrows" name="eyebrows">
+                <option value="big">Big</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+                <!-- Add more options as needed -->
+            </select>
+            
+    
+            <!-- Add dropdown for skin tone -->
+            <label for="skintone">Skin Tone:</label>
+            <select id="skintone" name="skintone">
+                <option value="fair">Fair</option>
+                <option value="medium">Medium</option>
+                <option value="dark" >Dark</option>
+                <!-- Add more options as needed -->
+            </select>
+    
+            <!-- Add dropdown for lips -->
+            <label for="lips">Lips Size:</label>
+            <select id="lips" name="lips">
+                <option value="big">Big</option>
+                <option value="medium">Medium</option>
+                <option value="small">Small</option>
+                <option value="very-small">Very Small</option>
+                <!-- Add more options as needed -->
+            </select>
+    
+            <!-- Add dropdown for gender -->
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <!-- Add more options as needed -->
+            </select>
+    
+            <!-- Add dropdown for age -->
+            <label for="age">Age:</label>
+            <select id="age" name="age">
+                <option value="child">Child</option>
+                <option value="adult">Adult</option>
+                <option value="old">Old</option>
+                <!-- Add more options as needed -->
+            </select>
+            <!-- Existing dropdowns -->
+            <button type="submit">Generate Image</button>
+        </form>
+        <div style="filter: blur(10px)">
+            <% if (image_path) { %>
+                <img src="<%= image_path %>" alt="Generated Image">
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

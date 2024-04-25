@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"></script>
+    <style>
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .text-input {
+            border-bottom: 2px solid #4F46E5;
+            background-color: transparent;
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 50px;
+            height: 50px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex justify-center items-center">
+    <div class="glassmorphism p-8 rounded-lg shadow-md w-full mx-10">
+        <div id="question" class="text-left text-5xl mb-4 "></div>
+        <input id="answer" type="text" class="text-input w-full py-2 mb-4" placeholder="Your Answer">
+        <div id="suggestions" class="text-sm text-gray-500 flex gap-3"></div>
+        <div class="flex justify-between mt-8">
+            <button id="prevBtn" class="px-4 py-2 bg-gray-300 rounded-md" disabled>Previous</button>
+            <button id="nextBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md">Next</button>
+        </div>
+    </div>
+    <div id="loader" class="loader hidden"></div>
+        <div id = "imageContainer"></div>
+    <script>
+        // Questions and suggestions array
+        const questions = [
+    {
+        tag: "gender",
+        question: "What gender do you remember of the culprit?:",
+        suggestions: ["Male", "Female"]
+    },
+    {
+        tag: "age",
+        question: "what can be the age ?:",
+        suggestions: ["Child", "Adult", "Old"]
+    },
+    {
+        tag: "hairstyle",
+        question: "Describe the hair style:",
+        suggestions: ["Long", "Short", "Curly"]
+    },
+    {
+        tag: "haircolor",
+        question: "What is the hair color?",
+        suggestions: ["Blonde", "Brunette", "Black"]
+    },
+    {
+        tag: "facialhair",
+        question: "Is there any facial hair?",
+        suggestions: ["None", "Stubble", "Beard"]
+    },
+    // {
+    //     tag: "glasses",
+    //     question: "Does the person wear glasses?",
+    //     suggestions: ["None", "Round", "Square"]
+    // },
+    // {
+    //     tag: "facialexpression",
+    //     question: "What is the facial expression?",
+    //     suggestions: ["Smile", "Neutral", "Frown"]
+    // },
+    // {
+    //     tag: "accessories",
+    //     question: "Are there any accessories?",
+    //     suggestions: ["None", "Earrings", "Necklace"]
+    // },
+    {
+        tag: "eyecolor",
+        question: "What is the eye color?",
+        suggestions: ["Blue", "Brown", "Green"]
+    },
+    // {
+    //     tag: "makeup",
+    //     question: "What type of makeup is applied?",
+    //     suggestions: ["Natural", "Bold", "Subtle"]
+    // },
+    {
+        tag: "headshape",
+        question: "Describe the head shape:",
+        suggestions: ["Round", "Square", "Oval"]
+    },
+    {
+        tag: "nosesize",
+        question: "How would you describe the nose size?",
+        suggestions: ["Big", "Medium", "Small", "Very Small"]
+    },
+    {
+        tag: "eyesize",
+        question: "What is the eye size?",
+        suggestions: ["Big", "Medium", "Small", "Very Small"]
+    },
+    {
+        tag: "eyebrowsize",
+        question: "What is the eyebrow size?",
+        suggestions: ["Big", "Small", "Medium", "Large"]
+    },
+    {
+        tag: "skintone",
+        question: "What is the skin tone?",
+        suggestions: ["Fair", "Medium", "Dark"]
+    },
+    {
+        tag: "lipssize",
+        question: "How would you describe the lips size?",
+        suggestions: ["Big", "Medium", "Small", "Very Small"]
+    },
+    {
+        tag: "additionalfeatures",
+        question: "Any other additional features?",
+        suggestions: ["Specify any other features..."]
+    }
+];
+
+// Example usage:
+
+
+        // User answers array
+        const userAnswers = {};
+
+        // Initialize index
+        let currentIndex = 0;
+
+        // Function to display question and suggestions
+        function displayQuestion(index) {
+            const { question, suggestions } = questions[index];
+            document.getElementById('question').textContent = question;
+            const suggestionsContainer = document.getElementById('suggestions');
+            suggestionsContainer.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const suggestionBtn = document.createElement('button');
+                suggestionBtn.textContent = suggestion;
+                suggestionBtn.classList.add('px-4', 'py-2', 'bg-gray-200', 'text-gray-700', 'rounded-md', 'hover:bg-gray-300', 'w-min', 'rounded-l-2xl', 'rounded-r-2xl');
+                suggestionBtn.addEventListener('click', () => {
+                    document.getElementById('answer').value = suggestion;
+                });
+                suggestionsContainer.appendChild(suggestionBtn);
+            });
+        }
+
+        // Function to handle next button click
+        function nextQuestion() {
+            const answer = document.getElementById('answer').value.trim();
+            userAnswers[`${questions[currentIndex].tag}`] = answer;
+            currentIndex++;
+            if (currentIndex < questions.length) {
+                displayQuestion(currentIndex);
+                document.getElementById('answer').value = '';
+                document.getElementById('prevBtn').disabled = false;
+            } else {
+                // All questions answered, make API call
+                makeAPICall(userAnswers);
+            }
+        }
+
+        function decreaseBlurAndHideLoading() {
+    const image = document.getElementById('imageContainer');
+    let blurValue = 20; // Initial blur value
+    const intervalId = setInterval(() => {
+        if (blurValue <= 0) {
+            clearInterval(intervalId); // Stop the interval when blur is 0
+            document.getElementById('loader').classList.add('hidden'); // Hide loading
+            return;
+        }
+        blurValue -= 2; // Decrease blur by 2 every iteration
+        image.style.filter = `blur(${blurValue}px)`; // Apply blur to the image
+    }, 1000); // Run every 5 seconds
+}
+
+        // Function to handle previous button click
+        function prevQuestion() {
+            currentIndex--;
+            displayQuestion(currentIndex);
+            document.getElementById('answer').value = userAnswers[currentIndex] || '';
+            if (currentIndex === 0) {
+                document.getElementById('prevBtn').disabled = true;
+            }
+        }
+
+        // Function to make API call
+        function makeAPICall(data) {
+            // Show loader
+            document.getElementById('loader').classList.remove('hidden');
+
+            // fetch('http://localhost:3003/genFace', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(data),
+            // })
+            axios.post("/genFace", data)
+            // .then(response => response.json())
+            .then(dat => {
+                // Hide loader
+                document.getElementById('loader').classList.add('hidden');
+
+                // Display image
+                console.log(dat)
+                const imageURL = dat.data.imageURL;
+                decreaseBlurAndHideLoading();
+                setTimeout(()=>{
+                    document.getElementById('imageContainer').innerHTML = "";
+                document.getElementById('imageContainer').innerHTML = `<img src="/${imageURL}" alt="Generated Image" class="mx-auto mt-10">`;
+                document.getElementById('imageContainer').classList.remove('hidden');
+                },1000)
+              
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+        }
+
+        // Initial display
+        displayQuestion(currentIndex);
+
+        // Event listeners for buttons
+        document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+        document.getElementById('prevBtn').addEventListener('click', prevQuestion);
+    </script>
+</body>
+</html>
