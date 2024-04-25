@@ -84,7 +84,7 @@ async function query(features,count) {
     const response = await fetch(
           getUrl(),
         {
-            headers: { Authorization: "Bearer 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" },
+            headers: { Authorization: process.env.AUTHORIZATION  },
             method: "POST",
             body: JSON.stringify(prompt),
            
